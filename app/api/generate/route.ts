@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { supabase } from "@/lib/supabase"
-import { generateContent } from "@/lib/gemini"
+import { generateContent } from "@/lib/deepseek"
 import { getUsageQuota, incrementUsage } from "@/lib/usage"
 import { GenerateRequest, CONTENT_TYPE_LABELS, STYLE_LABELS } from "@/types"
 
