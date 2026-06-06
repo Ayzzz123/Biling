@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  .gradient-hero {
+    background: linear-gradient(135deg, #ff3b3b 0%, #ff6b6b 50%, #ffa3a3 100%);
+  }
+
+  .card-shadow {
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  }
+}
