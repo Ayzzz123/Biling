@@ -16,10 +16,10 @@ interface GeneratorFormProps {
 }
 
 const PLACEHOLDERS = [
-  "例如：推荐一款平价好用的面霜",
-  "例如：考研上岸经验分享",
-  "例如：周末北京citywalk路线",
-  "例如：租房避坑指南",
+  "例如：端午节旅游指南，500字，分为三段",
+  "例如：推荐一款平价好用的面霜，写种草笔记",
+  "例如：考研上岸经验分享，干货风格",
+  "例如：租房避坑指南，200字，写3个要点",
 ]
 
 export default function GeneratorForm({
@@ -84,8 +84,8 @@ export default function GeneratorForm({
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
           placeholder={placeholder}
-          maxLength={200}
-          rows={3}
+          maxLength={500}
+          rows={4}
           className={cn(
             "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white",
             "text-gray-900 placeholder-gray-400",
@@ -98,7 +98,7 @@ export default function GeneratorForm({
             {initialQuota ? `今日剩余 ${initialQuota.remaining} 次` : ""}
           </span>
           <span className="text-xs text-gray-400">
-            {topic.length}/200
+            {topic.length}/500
           </span>
         </div>
       </div>

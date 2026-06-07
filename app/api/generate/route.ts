@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "请输入创作主题" }, { status: 400 })
     }
 
-    const topic = body.topic.trim().slice(0, 200)
+    const topic = body.topic.trim().slice(0, 500)
     if (topic.length < 2) {
       return NextResponse.json({ error: "主题太短，至少 2 个字" }, { status: 400 })
     }
