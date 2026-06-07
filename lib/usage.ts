@@ -37,7 +37,8 @@ export async function getUsageQuota(
   const isLoggedIn = !!userId
 
   if (isLoggedIn && userId) {
-    const { data } = await supabase
+    const client = getServiceSupabase()
+    const { data } = await client
       .from("usage_logs")
       .select("count")
       .eq("user_id", userId)
