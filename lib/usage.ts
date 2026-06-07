@@ -3,9 +3,29 @@ import { UsageQuota } from "@/types"
 
 const ANONYMOUS_DAILY_LIMIT = 2
 const LOGGED_IN_DAILY_LIMIT = 5
+const EARLY_BIRD_DAILY_LIMIT = 15
 
 export function getLimit(isLoggedIn: boolean): number {
   if (!isLoggedIn) return ANONYMOUS_DAILY_LIMIT
+  return LOGGED_IN_DAILY_LIMIT
+}
+
+async function checkEarlyBird(userId: string): Promise<boolean> {
+  try {
+    const client = getServiceSupabase()
+    const { data } = await client.rpc("is_early_bird", { user_id: userId })
+    return data === true
+  } catch {
+    return false
+  }
+}
+
+async function getEffectiveLimit(userId?: string): Promise<number> {
+  if (!userId) return ANONYMOUS_DAILY_LIMIT
+
+  const isEarlyBird = await checkEarlyBird(userId)
+  if (isEarlyBird) return EARLY_BIRD_DAILY_LIMIT
+
   return LOGGED_IN_DAILY_LIMIT
 }
 
@@ -25,7 +45,7 @@ export async function getUsageQuota(
       .maybeSingle()
 
     const used = data?.count ?? 0
-    const limit = getLimit(true)
+    const limit = await getEffectiveLimit(userId)
 
     return { used, limit, remaining: Math.max(0, limit - used) }
   }
