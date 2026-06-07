@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { supabase } from "@/lib/supabase"
 import Navbar from "@/components/Navbar"
 import GeneratorForm from "@/components/GeneratorForm"
 import ResultCard from "@/components/ResultCard"
@@ -11,14 +12,22 @@ export default function HomePage() {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [quota, setQuota] = useState<UsageQuota | null>(null)
+  const [token, setToken] = useState<string | null>(null)
 
   useEffect(() => {
-    fetchQuota()
+    supabase.auth.getSession().then(({ data }) => {
+      const t = data.session?.access_token ?? null
+      setToken(t)
+      fetchQuota(t)
+    })
   }, [])
 
-  const fetchQuota = async () => {
+  const fetchQuota = async (authToken?: string | null) => {
     try {
-      const res = await fetch("/api/usage")
+      const headers: Record<string, string> = {}
+      if (authToken) headers["Authorization"] = `Bearer ${authToken}`
+
+      const res = await fetch("/api/usage", { headers })
       if (res.ok) {
         const data = await res.json()
         setQuota(data.quota)
@@ -56,7 +65,7 @@ export default function HomePage() {
         {/* Hero */}
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-3 tracking-tight">
-            笔灵 ✨
+            笔灵
           </h1>
           <p className="text-lg text-gray-500">
             输入主题，秒出高质量小红书文案
@@ -71,6 +80,7 @@ export default function HomePage() {
             onLoading={setIsLoading}
             isLoading={isLoading}
             initialQuota={quota}
+            token={token}
           />
         </div>
 

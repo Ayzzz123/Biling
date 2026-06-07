@@ -12,6 +12,7 @@ interface GeneratorFormProps {
   onLoading: (loading: boolean) => void
   isLoading: boolean
   initialQuota: UsageQuota | null
+  token: string | null
 }
 
 const PLACEHOLDERS = [
@@ -27,6 +28,7 @@ export default function GeneratorForm({
   onLoading,
   isLoading,
   initialQuota,
+  token,
 }: GeneratorFormProps) {
   const [topic, setTopic] = useState("")
   const [contentType, setContentType] = useState<ContentType>("grass")
@@ -47,9 +49,12 @@ export default function GeneratorForm({
     onError("")
 
     try {
+      const headers: Record<string, string> = { "Content-Type": "application/json" }
+      if (token) headers["Authorization"] = `Bearer ${token}`
+
       const response = await fetch("/api/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ topic: topic.trim(), contentType, style }),
       })
 
