@@ -13,11 +13,13 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [quota, setQuota] = useState<UsageQuota | null>(null)
   const [token, setToken] = useState<string | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       const t = data.session?.access_token ?? null
       setToken(t)
+      setIsLoggedIn(!!t)
       fetchQuota(t)
     })
   }, [])
@@ -99,10 +101,13 @@ export default function HomePage() {
         {/* 底部 CTA */}
         {!result && !isLoading && !error && (
           <div className="text-center mt-12 py-8">
-            <p className="text-sm text-gray-400 mb-3">
-              {quota
-                ? `每天免费 ${quota.limit} 次 · 今日剩余 ${quota.remaining} 次`
-                : "加载中..."}
+            <p className="text-sm text-gray-500 mb-3">
+              {!quota
+                ? "加载中..."
+                : isLoggedIn
+                  ? `每天免费 ${quota.limit} 次 · 今日剩余 ${quota.remaining} 次`
+                  : `每天免费 ${quota.limit} 次 · 今日剩余 ${quota.remaining} 次 · 注册即享 5 次/天`
+              }
             </p>
             <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-400">
               <span>✨ 去 AI 味</span>
