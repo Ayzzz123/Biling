@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     if (quota.remaining <= 0) {
       return NextResponse.json(
         {
-          error: "今日免费额度已用完",
+          error: "今日额度已用完",
           quota,
         },
         { status: 429 }
