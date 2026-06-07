@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { PenLine, LogOut } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { User } from "@supabase/supabase-js"
@@ -11,6 +12,7 @@ type UserLevel = "" | "测试" | "普通" | "开发者"
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null)
   const [level, setLevel] = useState<UserLevel>("")
+  const router = useRouter()
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data }) => {
@@ -53,7 +55,9 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
-    window.location.reload()
+    setUser(null)
+    setLevel("")
+    router.push("/")
   }
 
   return (
