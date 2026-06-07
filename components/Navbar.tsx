@@ -6,7 +6,7 @@ import { PenLine, LogOut } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { User } from "@supabase/supabase-js"
 
-type UserLevel = "" | "测试" | "普通"
+type UserLevel = "" | "测试" | "普通" | "开发者"
 
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null)
@@ -23,7 +23,9 @@ export default function Navbar() {
         })
         if (res.ok) {
           const { quota } = await res.json()
-          setLevel(quota.limit >= 15 ? "测试" : "普通")
+          if (quota.limit >= 99999) setLevel("开发者")
+          else if (quota.limit >= 15) setLevel("测试")
+          else setLevel("普通")
         }
       }
     })
@@ -39,7 +41,9 @@ export default function Navbar() {
         })
         if (res.ok) {
           const { quota } = await res.json()
-          setLevel(quota.limit >= 15 ? "测试" : "普通")
+          if (quota.limit >= 99999) setLevel("开发者")
+          else if (quota.limit >= 15) setLevel("测试")
+          else setLevel("普通")
         }
       }
     })
