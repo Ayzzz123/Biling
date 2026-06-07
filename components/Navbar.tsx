@@ -6,16 +6,42 @@ import { PenLine, LogOut } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { User } from "@supabase/supabase-js"
 
+type UserLevel = "" | "测试" | "普通"
+
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null)
+  const [level, setLevel] = useState<UserLevel>("")
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user ?? null)
+    supabase.auth.getSession().then(async ({ data }) => {
+      const u = data.session?.user ?? null
+      setUser(u)
+
+      if (u && data.session) {
+        const res = await fetch("/api/usage", {
+          headers: { Authorization: `Bearer ${data.session.access_token}` },
+        })
+        if (res.ok) {
+          const { quota } = await res.json()
+          setLevel(quota.limit >= 15 ? "测试" : "普通")
+        }
+      }
     })
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
+    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const u = session?.user ?? null
+      setUser(u)
+      if (!u) setLevel("")
+
+      if (u && session) {
+        const res = await fetch("/api/usage", {
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        })
+        if (res.ok) {
+          const { quota } = await res.json()
+          setLevel(quota.limit >= 15 ? "测试" : "普通")
+        }
+      }
     })
 
     return () => listener.subscription.unsubscribe()
@@ -36,8 +62,15 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3 text-sm">
           {user ? (
-            <>
-              <span className="text-gray-500">{user.email}</span>
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <div className="text-gray-700 text-xs">{user.email}</div>
+                {level && (
+                  <div className="text-xs text-primary-500 font-medium">
+                    等级：{level}
+                  </div>
+                )}
+              </div>
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-1 text-gray-400 hover:text-gray-600 transition-colors"
@@ -45,7 +78,7 @@ export default function Navbar() {
                 <LogOut className="w-4 h-4" />
                 退出
               </button>
-            </>
+            </div>
           ) : (
             <Link
               href="/login"

@@ -49,9 +49,16 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-red-50 to-white px-4">
       <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-center mb-8">
+        <h1 className="text-2xl font-bold text-center mb-2">
           {isRegister ? "注册笔灵" : "登录笔灵"}
         </h1>
+        <p className="text-center text-sm text-gray-400 mb-6">
+          {isRegister ? "注册后每天 5 次免费生成" : ""}
+        </p>
+
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 text-sm text-amber-800">
+          🎉 <strong>早鸟活动：</strong>前 10 名注册用户每日可享 <strong>15 次</strong> 免费生成，之后注册的用户每天 5 次。名额有限，先到先得！
+        </div>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-4">
           <div>
