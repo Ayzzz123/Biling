@@ -22,8 +22,9 @@ export async function generateContent(
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      temperature: 0.9,
-      max_tokens: 1024,
+      temperature: 1.1,
+      top_p: 0.95,
+      max_tokens: 1200,
       response_format: { type: "json_object" },
     }),
   })
