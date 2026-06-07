@@ -90,7 +90,7 @@ export default function HomePage() {
         {!result && !isLoading && !error && (
           <div className="text-center mt-12 py-8">
             <p className="text-sm text-gray-400 mb-3">
-              每天免费 {quota?.limit ?? 1} 次 · 注册即享 3 次/天
+              每天免费 {quota?.limit ?? 2} 次 · 注册即享 5 次/天
             </p>
             <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-400">
               <span>✨ 去 AI 味</span>

@@ -1,8 +1,8 @@
 import { supabase, getServiceSupabase } from "./supabase"
 import { UsageQuota } from "@/types"
 
-const ANONYMOUS_DAILY_LIMIT = 1
-const LOGGED_IN_DAILY_LIMIT = 3
+const ANONYMOUS_DAILY_LIMIT = 2
+const LOGGED_IN_DAILY_LIMIT = 5
 
 export function getLimit(isLoggedIn: boolean): number {
   if (!isLoggedIn) return ANONYMOUS_DAILY_LIMIT

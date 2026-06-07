@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     if (quota.remaining <= 0) {
       return NextResponse.json(
         {
-          error: `今日免费额度已用完（${quota.limit} 次/天）。注册登录可提升至 3 次/天。`,
+          error: `今日免费额度已用完（${quota.limit} 次/天）。注册登录可提升至 5 次/天。`,
           quota,
         },
         { status: 429 }
