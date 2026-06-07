@@ -66,8 +66,8 @@ export default function Navbar() {
               <div className="text-right">
                 <div className="text-gray-700 text-xs">{user.email}</div>
                 {level && (
-                  <div className="text-xs text-primary-500 font-medium">
-                    等级：{level}
+                  <div className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-medium inline-block">
+                    {level}
                   </div>
                 )}
               </div>
